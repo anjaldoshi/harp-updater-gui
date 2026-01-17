@@ -6,6 +6,8 @@ A graphical user interface for managing Harp devices and updating firmware.
 Built with NiceGUI and integrating with the HarpRegulator CLI tool.
 """
 
+import os
+import sys
 from pathlib import Path
 from nicegui import ui, app
 from harp_regulator_gui.components.header import Header
@@ -114,6 +116,9 @@ class HarpFirmwareUpdaterApp:
 
 def start_app():
     """Initialize and start the application."""
+    # Ensure NiceGUI error pages can locate the running script when launched via entrypoints
+    sys.argv[0] = str(Path(__file__).resolve())
+
     # Add static files directory
     app.add_static_files('/static', str(STATIC_DIR))
     
@@ -131,8 +136,10 @@ def start_app():
     ui.run(
         title='HARP Regulator GUI',
         favicon='🔧',
+        host="0.0.0.0",
+        port=4277,
         dark=None,  # Start in auto mode (respects system preference)
-        reload=True,
+        reload=False,
         show=True
     )
 
