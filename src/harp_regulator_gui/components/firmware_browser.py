@@ -29,7 +29,7 @@ class FirmwareBrowser:
     
     def render(self):
         """Render the firmware browser panel"""
-        with ui.column().classes('flex-1 firmware-browser-container'):
+        with ui.element('div').classes('firmware-browser-container'):
             # Device summary section
             with ui.column().classes('firmware-section'):
                 with ui.row().classes('section-header'):
@@ -65,9 +65,9 @@ class FirmwareBrowser:
                 self.firmware_info_container = ui.column().classes('gap-2 mt-3')
             
             # Actions
-            with ui.row().classes('gap-2 mt-4'):
-                ui.button('⬇️ Download firmware', on_click=self.download_firmware).classes('btn btn-secondary flex-1')
-                self.deploy_button = ui.button('🚀 Deploy firmware', on_click=self.deploy_firmware).classes('btn btn-primary flex-1')
+            with ui.row().classes('firmware-actions gap-2 mt-4'):
+                ui.button('⬇️ Download firmware', on_click=self.download_firmware).classes('btn btn-secondary')
+                self.deploy_button = ui.button('🚀 Deploy firmware', on_click=self.deploy_firmware).classes('btn btn-primary')
                 self.deploy_button.set_enabled(False)
     
     def update_device(self, device: Optional[Device]):

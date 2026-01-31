@@ -28,7 +28,7 @@ class UpdateWorkflow:
     
     def render(self):
         """Render the update workflow panel"""
-        with ui.column().classes('sidebar-right workflow-container').style('width: 360px; min-height: 600px;'):
+        with ui.column().classes('sidebar-right workflow-container'):
             # Workflow title
             ui.label('Update Workflow').classes('workflow-title')
             
@@ -71,7 +71,7 @@ class UpdateWorkflow:
             state_icon = ui.label('•').classes(icon_class)
             
             # Step text
-            with ui.column().classes('flex-1'):
+            with ui.column().classes(''):
                 text_label = ui.label(step['text']).classes('progress-step-text font-medium')
                 meta_label = ui.label(step['meta']).classes('progress-step-text text-secondary text-xs')
             
@@ -175,10 +175,10 @@ class UpdateWorkflow:
                     ui.label(error_message).classes('text-red-900 text-sm')
                     with ui.row().classes('gap-2 mt-2'):
                         ui.button('Retry', on_click=self.on_retry).classes(
-                            'flex-1 bg-white border hover:bg-gray-50'
+                            'bg-white border hover:bg-gray-50'
                         )
                         ui.button('Rollback', on_click=self.on_rollback).classes(
-                            'flex-1 bg-white border hover:bg-gray-50'
+                            'bg-white border hover:bg-gray-50'
                         )
     
     def hide_error(self):

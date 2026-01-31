@@ -24,7 +24,7 @@ class DeviceList:
         
     def render(self):
         """Render the device list sidebar"""
-        with ui.column().classes('sidebar-left').style('width: 320px; min-height: 600px;'):
+        with ui.column().classes('sidebar-left'):
             # Search
             with ui.column().classes('device-search-container'):
                 search_input = ui.input(placeholder='Search devices...').classes('input-field')
@@ -41,7 +41,7 @@ class DeviceList:
                 ui.button('🔄 Check for updates', on_click=self.refresh_devices).classes('btn btn-primary btn-full mt-2')
             
             # Device list (scrollable)
-            self.device_list_container = ui.column().classes('device-list-container flex-1 overflow-y-auto')
+            self.device_list_container = ui.column().classes('device-list-container overflow-y-auto')
             
         # Initial load
         self.refresh_devices()

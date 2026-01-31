@@ -88,7 +88,7 @@ class HarpFirmwareUpdaterApp:
         self.header = Header(dark_mode_toggle=dark_mode)
         
         # Main content area with 3-column layout
-        with ui.row().classes('app-container w-full flex-1'):
+        with ui.element('div').classes('app-container'):
             # Left: Device List
             self.device_list = DeviceList(
                 device_manager=self.device_manager,
@@ -110,7 +110,7 @@ class HarpFirmwareUpdaterApp:
         # Footer
         with ui.footer().classes('footer-container'):
             with ui.row().classes('w-full items-center justify-between'):
-                ui.label('© 2025 Allen Institute').classes('text-sm')
+                ui.label('© 2026 Allen Institute').classes('text-sm')
                 ui.link('Help and Documentation', 'https://github.com/harp-tech/protocol', new_tab=True).classes('footer-link')
 
 

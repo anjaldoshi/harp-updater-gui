@@ -2,13 +2,12 @@
 
 /* 
  * Color Variables - Using NiceGUI/Quasar theme colors
- * All theme colors are set via ui.colors() in main.py and available as:
+ * Theme colors are set via ui.colors() in main.py and available as:
  * --q-primary, --q-secondary, --q-accent, --q-positive, --q-negative, --q-info, --q-warning
  */
 
 /* Light Mode Colors (default) */
 :root {
-    /* Neutral colors - Light Mode */
     --bg-primary: #ffffff;
     --bg-secondary: #f9fafb;
     --bg-tertiary: #f3f4f6;
@@ -20,7 +19,6 @@
     --border-color: #e5e7eb;
     --border-hover: #d1d5db;
     
-    /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
@@ -28,7 +26,6 @@
 
 /* Dark Mode Colors */
 body.body--dark {
-    /* Neutral colors - Dark Mode */
     --bg-primary: #1f2937;
     --bg-secondary: #111827;
     --bg-tertiary: #374151;
@@ -40,13 +37,15 @@ body.body--dark {
     --border-color: #374151;
     --border-hover: #4b5563;
     
-    /* Shadows - darker for dark mode */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
 }
 
-/* Global Layout - Flexbox approach */
+/* ===================
+   Global Layout
+   =================== */
+
 body, html {
     margin: 0;
     padding: 0;
@@ -58,30 +57,40 @@ body, html {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    width: 100%;
 }
 
-/* Base Layout */
+.nicegui-content > * {
+    width: 100%;
+}
+
 .app-container {
     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     flex: 1;
+    width: 100%;
+    min-height: 0;
+    height: 100%;
     background-color: var(--bg-secondary);
-    gap: 0;
-    padding: 0;
-    margin: 0;
     overflow: hidden;
+    padding-bottom: 100px;
 }
 
-.header-icon {
-    margin-right: 0.75rem;
-    font-size: 2rem;
-}
+/* ===================
+   Header
+   =================== */
 
-/* Header Styles */
 .header-container {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 1.5rem;
     box-shadow: var(--shadow-md);
+}
+
+.header-icon {
+    margin-right: 0.75rem;
+    font-size: 2rem;
 }
 
 .header-title {
@@ -94,7 +103,10 @@ body, html {
     opacity: 0.9;
 }
 
-/* Footer Styles */
+/* ===================
+   Footer
+   =================== */
+
 .footer-container {
     background-color: var(--bg-primary);
     border-top: 1px solid var(--border-color);
@@ -115,23 +127,36 @@ body, html {
     text-decoration: underline;
 }
 
-/* Sidebar Styles */
-.sidebar-left,
-.sidebar-right {
+/* ===================
+   Sidebars
+   =================== */
+
+.sidebar-left {
+    width: 320px;
+    flex: 0 0 320px;
     background-color: var(--bg-primary);
     border-right: 1px solid var(--border-color);
     overflow-y: auto;
-    flex-shrink: 0;
     display: flex;
     flex-direction: column;
+    max-height: 100%;
 }
 
 .sidebar-right {
-    border-right: none;
+    width: 360px;
+    flex: 0 0 360px;
+    background-color: var(--bg-primary);
     border-left: 1px solid var(--border-color);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
 }
 
-/* Device List Styles */
+/* ===================
+   Device List
+   =================== */
+
 .device-search-container {
     padding: 1rem;
     border-bottom: 1px solid var(--border-color);
@@ -146,6 +171,7 @@ body, html {
 
 .device-list-container {
     padding: 1rem;
+    margin-bottom: 1rem;
     flex: 1;
     overflow-y: auto;
 }
@@ -158,6 +184,7 @@ body, html {
     margin-bottom: 0.5rem;
     cursor: pointer;
     transition: all 0.2s ease;
+    width: 100%;
 }
 
 .device-card:hover {
@@ -211,10 +238,17 @@ body, html {
     margin-top: 0.25rem;
 }
 
-/* Firmware Browser Styles */
+/* ===================
+   Firmware Browser
+   =================== */
+
 .firmware-browser-container {
+    flex: 1 1 auto;
+    min-width: 300px;
+    min-height: 0;
+    max-height: 100%;
     padding: 1.5rem;
-    flex: 1;
+    padding-bottom: 2rem;
     background-color: var(--bg-primary);
     overflow-y: auto;
     display: flex;
@@ -223,6 +257,13 @@ body, html {
 
 .firmware-section {
     margin-bottom: 2rem;
+    flex-shrink: 0;
+}
+
+.firmware-actions {
+    flex-shrink: 0;
+    margin-top: 1rem;
+    padding-bottom: 2rem;
 }
 
 .section-header {
@@ -235,64 +276,23 @@ body, html {
 }
 
 .section-title {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--text-primary);
 }
 
-.firmware-list {
-    display: grid;
-    gap: 0.75rem;
-}
-
-.firmware-item {
-    background-color: var(--bg-primary);
+.summary-card {
+    background-color: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: 0.5rem;
-    padding: 1rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
 }
 
-.firmware-item:hover {
-    border-color: var(--q-primary);
-    box-shadow: var(--shadow-sm);
-}
+/* ===================
+   Update Workflow
+   =================== */
 
-.firmware-item.selected {
-    border-color: var(--q-primary);
-    background-color: color-mix(in srgb, var(--q-primary) 10%, var(--bg-primary));
-    border-width: 2px;
-}
-
-.firmware-name {
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.25rem;
-}
-
-.firmware-details {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-}
-
-.firmware-metadata {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-}
-
-.metadata-tag {
-    padding: 0.125rem 0.5rem;
-    background-color: var(--bg-tertiary);
-    border: 1px solid var(--border-color);
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-}
-
-/* Update Workflow Styles */
 .workflow-container {
     padding: 1.5rem;
     display: flex;
@@ -302,7 +302,7 @@ body, html {
 }
 
 .workflow-section {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .workflow-title {
@@ -316,35 +316,6 @@ body, html {
     font-size: 0.9rem;
     font-weight: 600;
     margin-bottom: 0.75rem;
-}
-
-.summary-card {
-    background-color: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 0.5rem;
-    padding: 1.25rem;
-    margin-bottom: 1rem;
-}
-
-.summary-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.summary-row:last-child {
-    border-bottom: none;
-}
-
-.summary-label {
-    font-weight: 500;
-    color: var(--text-secondary);
-}
-
-.summary-value {
-    font-weight: 600;
-    color: var(--text-primary);
 }
 
 .progress-container {
@@ -364,11 +335,7 @@ body, html {
     line-height: 1.5;
 }
 
-.activity-log-entry {
-    margin-bottom: 0.25rem;
-    word-wrap: break-word;
-}
-
+/* Progress Steps */
 .progress-step {
     display: flex;
     align-items: flex-start;
@@ -460,7 +427,10 @@ body, html {
     font-size: 0.8rem;
 }
 
-/* Button Styles */
+/* ===================
+   Buttons
+   =================== */
+
 .btn {
     padding: 0.625rem 1.25rem;
     border-radius: 0.375rem;
@@ -514,7 +484,10 @@ body, html {
     width: 100%;
 }
 
-/* Input Styles */
+/* ===================
+   Form Elements
+   =================== */
+
 .input-field {
     width: 100%;
     padding: 0.625rem 0.875rem;
@@ -535,7 +508,6 @@ body, html {
     color: var(--text-tertiary);
 }
 
-/* Select/Dropdown Styles */
 .select-field {
     width: 100%;
     padding: 0.625rem 0.875rem;
@@ -553,77 +525,12 @@ body, html {
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--q-primary) 10%, transparent);
 }
 
-/* Chip/Tag Styles */
-.chip {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.375rem 0.875rem;
-    background-color: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 9999px;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    white-space: nowrap;
-}
+/* ===================
+   Utility Classes
+   =================== */
 
-.chip-primary {
-    background-color: color-mix(in srgb, var(--q-primary) 20%, var(--bg-primary));
-    border-color: color-mix(in srgb, var(--q-primary) 50%, var(--bg-primary));
-    color: var(--q-primary);
-}
-
-.chip-success {
-    background-color: color-mix(in srgb, var(--q-positive) 20%, var(--bg-primary));
-    border-color: color-mix(in srgb, var(--q-positive) 50%, var(--bg-primary));
-    color: var(--q-positive);
-    font-weight: 500;
-}
-
-.chip-warning {
-    background-color: color-mix(in srgb, var(--q-warning) 20%, var(--bg-primary));
-    border-color: color-mix(in srgb, var(--q-warning) 50%, var(--bg-primary));
-    color: var(--q-warning);
-}
-
-/* Alert/Message Styles */
-.alert {
-    padding: 1rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-    border-left: 4px solid;
-}
-
-.alert-info {
-    background-color: color-mix(in srgb, var(--q-info) 15%, var(--bg-primary));
-    border-color: var(--q-info);
-    color: var(--q-info);
-}
-
-.alert-success {
-    background-color: color-mix(in srgb, var(--q-positive) 15%, var(--bg-primary));
-    border-color: var(--q-positive);
-    color: var(--q-positive);
-}
-
-.alert-warning {
-    background-color: color-mix(in srgb, var(--q-warning) 15%, var(--bg-primary));
-    border-color: var(--q-warning);
-    color: var(--q-warning);
-}
-
-.alert-error {
-    background-color: color-mix(in srgb, var(--q-negative) 15%, var(--bg-primary));
-    border-color: var(--q-negative);
-    color: var(--q-negative);
-}
-
-/* Utility Classes */
-.text-center {
-    text-align: center;
-}
-
-.text-right {
-    text-align: right;
+.hidden {
+    display: none !important;
 }
 
 .text-sm {
@@ -663,29 +570,19 @@ body, html {
 .p-1 { padding: 0.25rem; }
 .p-2 { padding: 0.5rem; }
 .p-3 { padding: 1rem; }
-.p-4 { padding: 1.5rem; }
 
-.flex {
-    display: flex;
-}
-
-.flex-col {
-    flex-direction: column;
-}
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 1rem; }
+.gap-4 { gap: 1.5rem; }
 
 .items-center {
     align-items: center;
 }
 
-.justify-between {
-    justify-content: space-between;
-}
+/* ===================
+   Scrollbar
+   =================== */
 
-.gap-1 { gap: 0.25rem; }
-.gap-2 { gap: 0.5rem; }
-.gap-3 { gap: 1rem; }
-
-/* Scrollbar Styles */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
