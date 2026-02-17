@@ -1,0 +1,16 @@
+site_name: HARP Updater GUI Docs
+site_description: User documentation for setup, tutorials, and support
+site_url: https://github.com/yourusername/harp-updater-gui
+repo_url: https://github.com/yourusername/harp-updater-gui
+repo_name: GitHub
+theme:
+  name: mkdocs
+nav:
+  - Home: index.md
+  - Setup Instructions: setup.md
+  - Tutorials: tutorials.md
+  - Issue Reporting: issue-reporting.md
+  - FAQs: faq.md
+markdown_extensions:
+  - admonition
+  - tables
