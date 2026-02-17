@@ -227,17 +227,17 @@ class HarpFirmwareUpdaterApp:
                     "Verifying firmware installation...", LogLevel.INFO
                 )
 
-                # Give device time to reboot and reconnect (5 seconds)
+                # Give device time to reboot and reconnect (3 seconds)
                 self.update_workflow.push_log(
                     "Waiting for device to reboot...", LogLevel.INFO
                 )
-                await run.io_bound(lambda: __import__("time").sleep(5))
+                await run.io_bound(lambda: __import__("time").sleep(3))
 
                 self.update_workflow.push_log("Firmware verified", LogLevel.SUCCESS)
                 self.update_workflow.complete_update(True)
 
             # Refresh device table to get updated info
-            self.device_table.refresh_devices()
+            await self.device_table.refresh_devices()
 
         except Exception as e:
             self.update_workflow.push_log(
@@ -333,6 +333,8 @@ def start_app():
         pass
 
 
-# Start the app if running as a module
-if __name__ in {"__main__", "__mp_main__"}:
+# Start the app when executed directly.
+# Do not start on "__mp_main__" because Windows multiprocessing workers
+# (used by run.cpu_bound) import this module under that name.
+if __name__ == "__main__":
     start_app()

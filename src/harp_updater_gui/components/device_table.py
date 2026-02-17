@@ -1,4 +1,4 @@
-from nicegui import ui, app
+from nicegui import ui, app, run
 from typing import Optional, Callable
 from pathlib import Path
 from harp_updater_gui.models.device import Device
@@ -36,6 +36,9 @@ class DeviceTable:
         self.deploy_button = None
         self.connect_all_on_refresh_checkbox = None
         self.connect_all_on_refresh = False
+        self.refresh_button = None
+        self.refresh_dialog = None
+        self.is_refreshing = False
 
         # Search and filter state
         self.filter_type = "All types"
@@ -104,9 +107,17 @@ class DeviceTable:
                     )
 
                     # Refresh button
-                    ui.button("🔄 Refresh", on_click=self.refresh_devices).classes(
+                    self.refresh_button = ui.button(
+                        "🔄 Refresh", on_click=self.refresh_devices
+                    ).classes(
                         "btn btn-secondary"
                     )
+
+            with ui.dialog() as self.refresh_dialog, ui.card().classes(
+                "items-center p-6"
+            ):
+                ui.spinner(size="lg", color="primary")
+                ui.label("Refreshing devices...").classes("text-base mt-3")
 
             # Refresh behavior controls
             with ui.row().classes("w-full items-center justify-end mb-2"):
@@ -233,30 +244,56 @@ class DeviceTable:
                     self.deploy_button.set_enabled(False)
 
             # Initial load
-            self.refresh_devices(show_notification=False)
+            ui.timer(0.1, self._initial_refresh, once=True)
 
-    def refresh_devices(self, show_notification: bool = True):
+    async def _initial_refresh(self):
+        """Run initial refresh after UI has mounted."""
+        await self.refresh_devices(show_notification=False)
+
+    def _set_refreshing(self, refreshing: bool):
+        """Update refresh UI state."""
+        self.is_refreshing = refreshing
+
+        if self.refresh_button:
+            self.refresh_button.set_enabled(not refreshing)
+
+        if self.refresh_dialog:
+            if refreshing:
+                self.refresh_dialog.open()
+            else:
+                self.refresh_dialog.close()
+
+    async def refresh_devices(self, show_notification: bool = True):
         """Refresh device list from device manager"""
+        if self.is_refreshing:
+            return
+
+        self._set_refreshing(True)
+
         if show_notification:
             ui.notify("Checking for devices...", type="info")
         try:
-            devices = self.device_manager.refresh_devices(
-                allow_connect=self.connect_all_on_refresh
+            devices = await run.io_bound(
+                self.device_manager.refresh_devices,
+                True,
+                self.connect_all_on_refresh,
             )
             self.update_table()
             if show_notification:
                 ui.notify(f"Found {len(devices)} device(s)", type="positive")
         except Exception as e:
             ui.notify(f"Error: {str(e)}", type="negative")
+        finally:
+            self._set_refreshing(False)
 
-    def on_connect_all_refresh_toggle(self, e):
+    async def on_connect_all_refresh_toggle(self, e):
         """Handle connect-on-refresh toggle changes."""
 
         print(f"Connect on refresh set to: {self.connect_all_on_refresh}")
 
         if self.connect_all_on_refresh:
             ui.notify("Connect on refresh enabled", type="info")
-            self.refresh_devices(show_notification=False)
+            await self.refresh_devices(show_notification=False)
         else:
             ui.notify("Connect on refresh disabled", type="info")
 
@@ -310,23 +347,6 @@ class DeviceTable:
             self.selected_device = next(
                 (d for d in devices if d.port_name == port_name), None
             )
-
-            if self.selected_device:
-                # Count how many devices have the same name
-                same_name_count = sum(
-                    1
-                    for d in devices
-                    if d.display_name == self.selected_device.display_name
-                )
-                if same_name_count > 1:
-                    ui.notify(
-                        f"Selected: {self.selected_device.display_name} ({same_name_count} devices with this name)",
-                        type="info",
-                    )
-                else:
-                    ui.notify(
-                        f"Selected: {self.selected_device.display_name}", type="info"
-                    )
 
             # Enable deploy button if firmware is selected
             if self.firmware_file_path and self.selected_device:

@@ -189,6 +189,29 @@ body, html {
 }
 
 
+.q-tooltip {
+    background-color: color-mix(in srgb, var(--bg-primary) 25%, transparent);
+    color: var(--text-secondary);
+    max-width: 50%;
+    font-size: 0.75rem;
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(8px); 
+    -webkit-backdrop-filter: blur(8px); /* For compatibility with older Webkit browsers */
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    box-shadow: var(--shadow-md);
+}
+
+.q-card {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+}
+
+
+
 /* Firmware upload card */
 .firmware-upload-card {
     background-color: var(--bg-primary);

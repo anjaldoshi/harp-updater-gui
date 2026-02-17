@@ -50,7 +50,7 @@ class UpdateWorkflow:
             ui.label("Activity Log").classes("workflow-title")
 
             # Log section
-            self.log = ui.log(max_lines=100).classes("activity-log w-full")
+            self.log = ui.log(max_lines=999).classes("activity-log w-full")
             self.push_log("Ready to start firmware updates.", LogLevel.INFO)
 
             # Alert container (initially hidden)
