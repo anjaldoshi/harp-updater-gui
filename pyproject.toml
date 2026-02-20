@@ -3,7 +3,7 @@ name = "harp-updater-gui"
 version = "0.1.0"
 description = "A GUI for managing Harp devices and updating firmware."
 authors = [
-    {name = "Your Name", email = "your.email@example.com"}
+    {name = "Anjal Doshi", email = "anjal.doshi@alleninstitute.org"}
 ]
 license = {text = "MIT"}
 readme = "README.md"
@@ -26,8 +26,8 @@ dev = [
 harp-updater-gui = "harp_updater_gui.main:start_app"
 
 [project.urls]
-Homepage = "https://github.com/yourusername/harp-updater-gui"
-Documentation = "https://github.com/yourusername/harp-updater-gui#readme"
+Homepage = "https://github.com/AllenNeuralDynamics/harp-updater-gui"
+Documentation = "https://github.com/AllenNeuralDynamics/harp-updater-gui#readme"
 
 [build-system]
 requires = ["hatchling"]
