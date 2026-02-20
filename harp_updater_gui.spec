@@ -12,7 +12,7 @@ a = Analysis(
     ['src\\harp_updater_gui\\main.py'],
     pathex=[],
     binaries=[],
-    datas=[(get_nicegui_path(), 'nicegui'), ('src/harp_updater_gui/static', 'static')],
+    datas=[(get_nicegui_path(), 'nicegui'), ('src/harp_updater_gui/static', 'static'), ('deps/harp_regulator', 'harp_regulator')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

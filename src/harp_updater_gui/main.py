@@ -9,6 +9,7 @@ Built with NiceGUI and integrating with the HarpRegulator CLI tool.
 from multiprocessing import freeze_support
 import sys
 import logging
+import shutil
 from pathlib import Path
 from nicegui import ui, app, run
 from nicegui import core as nicegui_core
@@ -61,13 +62,22 @@ class HarpFirmwareUpdaterApp:
 
     def __init__(self):
         """Initialize the application"""
+
+        # Resolve paths to external tools per os depending on source vs frozen execution
+        self.regulator_path = shutil.which("HarpRegulator.exe")
+        if self.regulator_path is None:
+            if getattr(sys, "frozen", False):
+                exe_dir = Path(sys.executable).resolve().parent
+                self.regulator_path = str(exe_dir / "_internal" / "harp_regulator" / "win-x64" /"HarpRegulator.exe")
+            else:
+                self.regulator_path = str(Path(__file__).resolve().parent.parent.parent / "deps" / "harp_regulator" / "win-x64" / "HarpRegulator.exe")
+        
+        print(f"Resolved HarpRegulator path: {self.regulator_path}")
+
+
         # Initialize services
-        self.device_manager = DeviceManager(
-            "C:\\Users\\anjal.doshi\\projects\\aind\\harp-regulator\\artifacts\\bin\\HarpRegulator\\release\\HarpRegulator.exe"
-        )
-        self.firmware_service = FirmwareService(
-            "C:\\Users\\anjal.doshi\\projects\\aind\\harp-regulator\\artifacts\\bin\\HarpRegulator\\release\\HarpRegulator.exe"
-        )
+        self.device_manager = DeviceManager(self.regulator_path)
+        self.firmware_service = FirmwareService(self.regulator_path)
 
         # Initialize components (will be set in render)
         self.header = None
