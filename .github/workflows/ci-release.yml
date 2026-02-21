@@ -1,0 +1,115 @@
+name: CI and Release
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  lint_and_test:
+    name: Lint and test
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Run tests
+        run: uv run pytest
+
+  release_main:
+    name: Tag, build, zip, release
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: lint_and_test
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Compute tag and asset names
+        id: meta
+        shell: python
+        run: |
+          import os
+          import pathlib
+          import tomllib
+
+          pyproject = pathlib.Path('pyproject.toml')
+          data = tomllib.loads(pyproject.read_text(encoding='utf-8'))
+          version = data['project']['version']
+          run_number = os.environ['GITHUB_RUN_NUMBER']
+          run_attempt = os.environ['GITHUB_RUN_ATTEMPT']
+          run_tag = f"v{version}-{run_number}.{run_attempt}"
+          zip_name = f"harp_updater_gui-{run_tag}.zip"
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as out:
+              out.write(f"tag={version}\n")
+              out.write(f"zip_name={zip_name}\n")
+
+      - name: Create and push tag
+        shell: pwsh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "${{ steps.meta.outputs.tag }}"
+          git push origin "${{ steps.meta.outputs.tag }}"
+
+      - name: Build executable from spec
+        run: uv run pyinstaller harp_updater_gui.spec
+
+      - name: Zip build output
+        shell: pwsh
+        run: |
+          New-Item -Path dist -ItemType Directory -Force | Out-Null
+          Compress-Archive -Path dist/harp_updater_gui/* -DestinationPath "dist/${{ steps.meta.outputs.zip_name }}" -Force
+
+      - name: Upload zip as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.meta.outputs.zip_name }}
+          path: dist/${{ steps.meta.outputs.zip_name }}
+
+      - name: Create GitHub release and upload zip
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.meta.outputs.tag }}
+          name: Release ${{ steps.meta.outputs.tag }}
+          generate_release_notes: true
+          files: dist/${{ steps.meta.outputs.zip_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
