@@ -1,8 +1,8 @@
 from typing import List, Optional, Dict, Any
 from pathlib import Path
 from harp_updater_gui.services.cli_wrapper import CLIWrapper
-from harp_updater_gui.models.firmware import Firmware
-from harp_updater_gui.models.device import Device
+# from harp_updater_gui.models.firmware import Firmware
+# from harp_updater_gui.models.device import Device
 
 
 class FirmwareService:
