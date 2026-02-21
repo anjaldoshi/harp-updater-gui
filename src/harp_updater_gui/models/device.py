@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 class Device(BaseModel):
@@ -51,8 +51,7 @@ class Device(BaseModel):
         None, alias="Source", description="Device source identifier"
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
     @field_validator("serial_number", mode="before")
     def serialize_serial_number(cls, value):

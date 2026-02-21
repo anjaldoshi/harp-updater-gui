@@ -22,16 +22,33 @@ def test_validate_firmware_file(firmware_service, tmp_path):
     test_file = tmp_path / "test.uf2"
     test_file.write_text("test content")
 
-    assert firmware_service.validate_firmware_file(str(test_file)) is True
+    device_kind = "Pico"
+
     assert (
-        firmware_service.validate_firmware_file(str(tmp_path / "nonexistent.uf2"))
+        firmware_service.validate_firmware_file(device_kind, str(test_file))[0] is True
+    )
+    assert (
+        firmware_service.validate_firmware_file(
+            device_kind, str(tmp_path / "nonexistent.uf2")
+        )[0]
         is False
+    )
+
+    # Test wrong device kind
+    assert (
+        firmware_service.validate_firmware_file("UnknownDevice", str(test_file))[0]
+        is False
+    )
+    assert (
+        firmware_service.validate_firmware_file("ATxmega", str(test_file))[0] is False
     )
 
     # Test invalid extension
     bad_file = tmp_path / "test.bin"
     bad_file.write_text("test")
-    assert firmware_service.validate_firmware_file(str(bad_file)) is False
+    assert (
+        firmware_service.validate_firmware_file(device_kind, str(bad_file))[0] is False
+    )
 
 
 def test_get_available_firmware_versions(firmware_service):

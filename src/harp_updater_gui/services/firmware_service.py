@@ -132,6 +132,9 @@ class FirmwareService:
         ext = self.get_firmware_type(firmware_path)
         if ext not in [".uf2", ".hex"]:
             return False, "Unsupported firmware file type"
+        
+        if device_kind not in ["Pico", "ATxmega"]:
+            return False, "Unknown device kind"
 
         # Check compatibility based on device kind
         if device_kind == "Pico" and ext != ".uf2":
