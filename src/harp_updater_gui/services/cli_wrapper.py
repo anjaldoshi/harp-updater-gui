@@ -14,6 +14,27 @@ class CLIWrapper:
             cli_path: Path to HarpRegulator executable (default: "HarpRegulator" in PATH)
         """
         self.cli_path = cli_path
+        self._subprocess_kwargs: Dict[str, Any] = {}
+
+        if hasattr(subprocess, "CREATE_NO_WINDOW"):
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            startupinfo.wShowWindow = 0
+            self._subprocess_kwargs = {
+                "startupinfo": startupinfo,
+                "creationflags": subprocess.CREATE_NO_WINDOW,
+            }
+
+    def _run_command(self, cmd: List[str]) -> subprocess.CompletedProcess[str]:
+        """Run CLI command without flashing a console window on Windows."""
+        return subprocess.run(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=True,
+            **self._subprocess_kwargs,
+        )
 
     def list_devices(
         self, all_devices: bool = True, allow_connect: bool = True
@@ -37,13 +58,7 @@ class CLIWrapper:
             cmd.append("--allow-connect")
 
         try:
-            result = subprocess.run(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                check=True,
-            )
+            result = self._run_command(cmd)
 
             if result.stdout.strip():
                 devices = json.loads(result.stdout)
@@ -70,13 +85,7 @@ class CLIWrapper:
         cmd = [self.cli_path, "inspect", firmware_path, "--json"]
 
         try:
-            result = subprocess.run(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                check=True,
-            )
+            result = self._run_command(cmd)
 
             if result.stdout.strip():
                 return json.loads(result.stdout)
@@ -133,13 +142,7 @@ class CLIWrapper:
             cmd.append("--verbose")
 
         try:
-            result = subprocess.run(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                check=True,
-            )
+            result = self._run_command(cmd)
             return True, result.stdout
 
         except subprocess.CalledProcessError as e:
@@ -155,13 +158,7 @@ class CLIWrapper:
         cmd = [self.cli_path, "install-drivers"]
 
         try:
-            result = subprocess.run(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                check=True,
-            )
+            result = self._run_command(cmd)
             return True, result.stdout
 
         except subprocess.CalledProcessError as e:
