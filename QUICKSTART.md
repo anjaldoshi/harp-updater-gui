@@ -4,7 +4,7 @@ Get the current app running in a few minutes.
 
 ## Prerequisites
 
-1. Python `>=3.9,<4.0` (3.12 recommended)
+1. Python `>=3.11,<4.0` (3.12 recommended)
 2. HarpRegulator CLI installed
 3. `uv` package manager
 

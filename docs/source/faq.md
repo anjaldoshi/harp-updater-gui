@@ -32,4 +32,4 @@ Only when normal upload fails due to compatibility/safety checks and you underst
 ## Where can I get more help?
 
 - [Issue Reporting](issue-reporting.md)
-- GitHub repository: https://github.com/yourusername/harp-updater-gui
+- GitHub repository: [https://github.com/AllenNeuralDynamics/harp-updater-gui](https://github.com/AllenNeuralDynamics/harp-updater-gui)

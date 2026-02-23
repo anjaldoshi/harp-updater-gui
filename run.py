@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Quick start script for HARP Firmware Updater GUI
+Quick start script for Harp Firmware Updater GUI
 
 This script provides a simple way to launch the application.
 """

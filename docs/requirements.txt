@@ -1,0 +1,4 @@
+sphinx>9.0.0
+furo>=2025.7.19
+myst-parser>=5.0.0
+sphinx-jinja>=2.0.2

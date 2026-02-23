@@ -19,7 +19,7 @@ Please collect:
 
 Open an issue on GitHub:
 
-- https://github.com/yourusername/harp-updater-gui/issues
+- [https://github.com/AllenNeuralDynamics/harp-updater-gui/issues](https://github.com/AllenNeuralDynamics/harp-updater-gui/issues)
 
 ## Issue template (copy/paste)
 

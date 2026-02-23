@@ -1,4 +1,4 @@
-# HARP Firmware Updater GUI - Current Implementation
+# Harp Firmware Updater GUI - Current Implementation
 
 ## Overview
 

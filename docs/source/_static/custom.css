@@ -1,0 +1,5 @@
+/* Custom overrides for Sphinx docs */
+
+.sidebar-logo {
+    max-height: 100px;
+}

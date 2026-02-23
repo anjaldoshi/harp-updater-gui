@@ -1,4 +1,4 @@
-# HARP Firmware Updater GUI
+# Harp Firmware Updater GUI
 
 Desktop GUI for updating Harp device firmware using the HarpRegulator CLI. The app is built with NiceGUI, runs in native window mode via `pywebview`, and includes an integrated device table + activity log workflow.
 
@@ -15,7 +15,7 @@ Desktop GUI for updating Harp device firmware using the HarpRegulator CLI. The a
 
 ## Prerequisites
 
-- Python `>=3.9,<4.0` (3.12 recommended)
+- Python `>=3.11,<4.0` (3.12 recommended)
 - HarpRegulator CLI available on your machine
 - Connected Harp devices
 
@@ -24,6 +24,23 @@ Desktop GUI for updating Harp device firmware using the HarpRegulator CLI. The a
 ## Installation
 
 This repository uses [uv](https://docs.astral.sh/uv/).
+
+## Download pre-built binaries (recommended for end users)
+
+If you do not want to install Python, download the packaged app from GitHub Releases:
+
+1. Open: https://github.com/AllenNeuralDynamics/harp-updater-gui/releases
+2. Download the latest Windows release asset zip (for example `harp_updater_gui-vX.Y.Z.zip`).
+3. If it came from a zip, right-click zip → Properties → Unblock before extracting.
+4. Extract the zip to a local folder (for example `C:\Apps\harp_updater_gui`).
+5. Run `harp_updater_gui.exe`.
+
+Notes:
+
+- Keep `harp_updater_gui.exe` and `_internal` in the same folder structure after extraction.
+- Install Microsoft .NET 8.0 Desktop Runtime (x64): https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime/desktop
+- If Windows SmartScreen appears, click **More info** → **Run anyway** (only if the source is trusted).
+- If native window mode fails to open, see Troubleshooting below.
 
 ### 1) Install uv
 
@@ -45,6 +62,10 @@ uv sync
 ```
 
 ## Run
+
+If you installed from a release binary, launch `harp_updater_gui.exe`.
+
+If you are running from source:
 
 ```bash
 uv run harp-updater-gui

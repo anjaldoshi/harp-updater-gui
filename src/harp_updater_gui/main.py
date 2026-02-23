@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-HARP Firmware Updater GUI
+Harp Firmware Updater GUI
 
 A graphical user interface for managing Harp devices and updating firmware.
 Built with NiceGUI and integrating with the HarpRegulator CLI tool.
@@ -331,7 +331,7 @@ class HarpFirmwareUpdaterApp:
                 ui.label("© 2026 Allen Institute").classes("text-sm")
                 ui.link(
                     "Help and Documentation",
-                    "https://github.com/harp-tech/protocol",
+                    "https://harp-updater-gui.readthedocs.io/en/latest/",
                     new_tab=True,
                 ).classes("footer-link")
 
